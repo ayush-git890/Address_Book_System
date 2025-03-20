@@ -45,6 +45,10 @@ class Contact {
     static validateEmail(email) {
         return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email);
     }
+
+    displayContact() {
+        return `${this.firstName} ${this.lastName}, ${this.address}, ${this.city}, ${this.state}, ${this.zip}, ${this.phone}, ${this.email}`;
+    }
 }
 
 class AddressBook {
@@ -53,6 +57,10 @@ class AddressBook {
     }
 
     addContact(firstName, lastName, address, city, state, zip, phone, email) {
+        if (this.contacts.some(c => c.firstName === firstName && c.lastName === lastName)) {
+            console.error('Duplicate contact entry detected. Contact not added.');
+            return;
+        }
         try {
             const contact = new Contact(firstName, lastName, address, city, state, zip, phone, email);
             this.contacts.push(contact);
@@ -63,7 +71,7 @@ class AddressBook {
     }
 
     displayContacts() {
-        return this.contacts.map(contact => JSON.stringify(contact, null, 2)).join("\n");
+        return this.contacts.map(contact => contact.displayContact());
     }
 
     findAndEditContact(name, updatedDetails) {
@@ -93,20 +101,20 @@ class AddressBook {
 
 const addressBook = new AddressBook();
 
-console.log(JSON.stringify(addressBook.contacts));
-
-addressBook.addContact("Ayush", "Agarwal", "Agra", "Agra", "Uttar Pradesh", "282001", "9876543210", "ayushofficial4208@gmail.com");
-addressBook.addContact("Mukul", "Singh", "Mathura", "Mathura", "Uttar Pradesh", "281001", "1234567890", "mukul.singh@example.com");
-addressBook.addContact("Ajay", "Tyagi", "Delhi", "Delhi", "Delhi", "110001", "9988776655", "ajay.tyagi@example.com");
-addressBook.addContact("Aditya", "Chauhan", "Noida", "Noida", "Uttar Pradesh", "201301", "8765432109", "aditya.chauhan@example.com");
+addressBook.addContact("Yugdeep", "Parihar", "Mathura", "CityName", "UttarPradesh", "281001", "1234567890", "yugdeep@gmail.com");
+addressBook.addContact("Abc", "Sharma", "Mathura", "CityName", "UttarPradesh", "281001", "1234567890", "abc@gmail.com");
+addressBook.addContact("Priyanshu", "Sharma", "Mathura", "CityName", "UttarPradesh", "281001", "1234567890", "priyanshu@gmail.com");
+addressBook.addContact("Xyz", "Sharma", "Mathura", "CityName", "UttarPradesh", "281001", "1234567890", "xyz@gmail.com");
+addressBook.addContact("Sohan", "Sharma", "Mathura", "CityName", "UttarPradesh", "281001", "1234567890", "Sohan@gmail.com");
 
 console.log(JSON.stringify(addressBook.contacts, null, 2));
-console.log();
 
-addressBook.findAndEditContact("Ayush", { city: "New Delhi", phone: "9998887776" });
+addressBook.findAndEditContact("Xyz", { city: "NewCity", phone: "9876543210" });
 console.log(JSON.stringify(addressBook.contacts, null, 2));
 
-addressBook.findAndDeleteContact("Mukul");
+addressBook.findAndDeleteContact("Abc");
 console.log(JSON.stringify(addressBook.contacts, null, 2));
 
 console.log("Number of contacts in address book:", addressBook.getContactCount());
+
+addressBook.addContact("Sohan", "Sharma", "Mathura", "CityName", "UttarPradesh", "281001", "1234567890", "Sohan@gmail.com");
