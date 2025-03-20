@@ -45,10 +45,6 @@ class Contact {
     static validateEmail(email) {
         return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email);
     }
-
-    displayContact() {
-        return `${this.firstName} ${this.lastName}, ${this.address}, ${this.city}, ${this.state}, ${this.zip}, ${this.phone}, ${this.email}`;
-    }
 }
 
 class AddressBook {
@@ -71,7 +67,7 @@ class AddressBook {
     }
 
     displayContacts() {
-        return this.contacts.map(contact => contact.displayContact());
+        return this.contacts.map(contact => contact);
     }
 
     findAndEditContact(name, updatedDetails) {
@@ -97,24 +93,28 @@ class AddressBook {
     getContactCount() {
         return this.contacts.length;
     }
+
+    searchByCityOrState(location) {
+        return this.contacts.filter(contact => contact.city === location || contact.state === location);
+    }
 }
 
 const addressBook = new AddressBook();
 
-addressBook.addContact("Yugdeep", "Parihar", "Mathura", "CityName", "UttarPradesh", "281001", "1234567890", "yugdeep@gmail.com");
-addressBook.addContact("Abc", "Sharma", "Mathura", "CityName", "UttarPradesh", "281001", "1234567890", "abc@gmail.com");
-addressBook.addContact("Priyanshu", "Sharma", "Mathura", "CityName", "UttarPradesh", "281001", "1234567890", "priyanshu@gmail.com");
-addressBook.addContact("Xyz", "Sharma", "Mathura", "CityName", "UttarPradesh", "281001", "1234567890", "xyz@gmail.com");
-addressBook.addContact("Sohan", "Sharma", "Mathura", "CityName", "UttarPradesh", "281001", "1234567890", "Sohan@gmail.com");
+addressBook.addContact("Ayush", "Agarwal", "Vijay Nagar", "Agra", "Uttar Pradesh", "282004", "9876543210", "ayushofficial4208@gmail.com");
+addressBook.addContact("Mukul", "Singh", "Civil Lines", "Aligarh", "Uttar Pradesh", "202001", "8765432109", "mukul@gmail.com");
+addressBook.addContact("Ajay", "Tyagi", "Sector 62", "Noida", "Uttar Pradesh", "201301", "7654321098", "ajay@gmail.com");
+addressBook.addContact("Aditya", "Chauhan", "Raj Nagar", "Ghaziabad", "Uttar Pradesh", "201002", "6543210987", "aditya@gmail.com");
 
 console.log(JSON.stringify(addressBook.contacts, null, 2));
 
-addressBook.findAndEditContact("Xyz", { city: "NewCity", phone: "9876543210" });
+addressBook.findAndEditContact("Ayush", { city: "Mathura", phone: "9123456789" });
 console.log(JSON.stringify(addressBook.contacts, null, 2));
 
-addressBook.findAndDeleteContact("Abc");
+addressBook.findAndDeleteContact("Mukul");
 console.log(JSON.stringify(addressBook.contacts, null, 2));
 
 console.log("Number of contacts in address book:", addressBook.getContactCount());
 
-addressBook.addContact("Sohan", "Sharma", "Mathura", "CityName", "UttarPradesh", "281001", "1234567890", "Sohan@gmail.com");
+console.log("Contacts in Agra:", addressBook.searchByCityOrState("Agra"));
+console.log("Contacts in Uttar Pradesh:", addressBook.searchByCityOrState("Uttar Pradesh"));
