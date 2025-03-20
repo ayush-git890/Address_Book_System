@@ -26,6 +26,10 @@ class Contact {
         this.email = email;
     }
 
+    displayContact() {
+        return `${this.firstName} ${this.lastName}, ${this.address}, ${this.city}, ${this.state}, ${this.zip}, Phone: ${this.phone}, Email: ${this.email}`;
+    }
+
     static validateName(name) {
         return /^[A-Z][a-zA-Z]{2,}$/.test(name);
     }
@@ -67,7 +71,7 @@ class AddressBook {
     }
 
     displayContacts() {
-        return this.contacts.map(contact => contact);
+        return this.contacts.map(contact => contact.displayContact());
     }
 
     findAndEditContact(name, updatedDetails) {
@@ -97,24 +101,49 @@ class AddressBook {
     searchByCityOrState(location) {
         return this.contacts.filter(contact => contact.city === location || contact.state === location);
     }
+
+    viewPersonsByCityOrState() {
+        const groupedByCity = this.contacts.reduce((acc, contact) => {
+            acc[contact.city] = acc[contact.city] || [];
+            acc[contact.city].push(contact.displayContact());
+            return acc;
+        }, {});
+
+        const groupedByState = this.contacts.reduce((acc, contact) => {
+            acc[contact.state] = acc[contact.state] || [];
+            acc[contact.state].push(contact.displayContact());
+            return acc;
+        }, {});
+
+        return { groupedByCity, groupedByState };
+    }
 }
 
+// Creating an address book instance
 const addressBook = new AddressBook();
 
-addressBook.addContact("Ayush", "Agarwal", "Vijay Nagar", "Agra", "Uttar Pradesh", "282004", "9876543210", "ayushofficial4208@gmail.com");
-addressBook.addContact("Mukul", "Singh", "Civil Lines", "Aligarh", "Uttar Pradesh", "202001", "8765432109", "mukul@gmail.com");
-addressBook.addContact("Ajay", "Tyagi", "Sector 62", "Noida", "Uttar Pradesh", "201301", "7654321098", "ajay@gmail.com");
-addressBook.addContact("Aditya", "Chauhan", "Raj Nagar", "Ghaziabad", "Uttar Pradesh", "201002", "6543210987", "aditya@gmail.com");
+// Adding contacts (including you and your VisionLock teammates)
+addressBook.addContact("Ayush", "Agarwal", "Civil Lines", "Agra", "Uttar Pradesh", "282001", "9876543210", "ayushofficial4208@gmail.com");
+addressBook.addContact("Mukul", "Singh", "Sector 62", "Noida", "Uttar Pradesh", "201301", "9123456789", "mukul@gmail.com");
+addressBook.addContact("Ajay", "Tyagi", "Indirapuram", "Ghaziabad", "Uttar Pradesh", "201002", "9234567890", "ajay@gmail.com");
+addressBook.addContact("Aditya", "Chauhan", "Connaught Place", "Delhi", "Delhi", "110001", "9345678901", "aditya@gmail.com");
 
-console.log(JSON.stringify(addressBook.contacts, null, 2));
+console.log("Initial Contacts:", JSON.stringify(addressBook.contacts, null, 2));
 
-addressBook.findAndEditContact("Ayush", { city: "Mathura", phone: "9123456789" });
-console.log(JSON.stringify(addressBook.contacts, null, 2));
+// Editing Ajay's details
+addressBook.findAndEditContact("Ajay", { city: "New Ghaziabad", phone: "9988776655" });
+console.log("After Editing Ajay's Contact:", JSON.stringify(addressBook.contacts, null, 2));
 
+// Deleting Mukul's contact
 addressBook.findAndDeleteContact("Mukul");
-console.log(JSON.stringify(addressBook.contacts, null, 2));
+console.log("After Deleting Mukul's Contact:", JSON.stringify(addressBook.contacts, null, 2));
 
+// Displaying total contacts count
 console.log("Number of contacts in address book:", addressBook.getContactCount());
 
+// Searching contacts by city or state
 console.log("Contacts in Agra:", addressBook.searchByCityOrState("Agra"));
 console.log("Contacts in Uttar Pradesh:", addressBook.searchByCityOrState("Uttar Pradesh"));
+
+// Viewing persons by city or state
+console.log("Persons grouped by city and state:", addressBook.viewPersonsByCityOrState());
