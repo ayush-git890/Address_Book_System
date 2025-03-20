@@ -69,6 +69,16 @@ class AddressBook {
     displayContacts() {
         return this.contacts.map(contact => contact.displayContact());
     }
+
+    findAndEditContact(name, updatedDetails) {
+        const contact = this.contacts.find(c => c.firstName === name || c.lastName === name);
+        if (contact) {
+            Object.assign(contact, updatedDetails);
+            console.log('Contact updated successfully:', contact);
+        } else {
+            console.error('Contact not found.');
+        }
+    }
 }
 
 const addressBook = new AddressBook();
@@ -76,9 +86,13 @@ const addressBook = new AddressBook();
 console.log(JSON.stringify(addressBook.contacts));
 
 addressBook.addContact("Ayush", "Agarwal", "Agra", "Agra", "Uttar Pradesh", "282001", "9876543210", "ayushofficial4208@gmail.com");
-addressBook.addContact("Mukul", "Singh", "Mathura", "Mathura", "Uttar Pradesh", "281001", "1234567890", "mukul.singh@example.com");
-addressBook.addContact("Ajay", "Tyagi", "Noida", "Noida", "Uttar Pradesh", "201301", "1122334455", "ajay.tyagi@example.com");
-addressBook.addContact("Aditya", "Chauhan", "Delhi", "Delhi", "Delhi", "110001", "9988776655", "aditya.chauhan@example.com");
+addressBook.addContact("Mukul", "Singh", "Delhi", "New Delhi", "Delhi", "110001", "9123456789", "mukul.singh@example.com");
+addressBook.addContact("Ajay", "Tyagi", "Noida", "Noida", "Uttar Pradesh", "201301", "9234567890", "ajay.tyagi@example.com");
+addressBook.addContact("Aditya", "Chauhan", "Lucknow", "Lucknow", "Uttar Pradesh", "226001", "9345678901", "aditya.chauhan@example.com");
 
 console.log(JSON.stringify(addressBook.contacts, null, 2));
 console.log();
+
+addressBook.findAndEditContact("Ajay", { city: "Ghaziabad", phone: "9988776655" });
+
+console.log(JSON.stringify(addressBook.contacts, null, 2));
