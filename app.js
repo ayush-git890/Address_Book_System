@@ -45,10 +45,6 @@ class Contact {
     static validateEmail(email) {
         return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email);
     }
-
-    displayContact() {
-        return `${this.firstName} ${this.lastName}, ${this.address}, ${this.city}, ${this.state}, ${this.zip}, Phone: ${this.phone}, Email: ${this.email}`;
-    }
 }
 
 class AddressBook {
@@ -67,7 +63,7 @@ class AddressBook {
     }
 
     displayContacts() {
-        return this.contacts.map(contact => contact.displayContact());
+        return this.contacts.map(contact => JSON.stringify(contact, null, 2));
     }
 
     findAndEditContact(name, updatedDetails) {
@@ -79,12 +75,21 @@ class AddressBook {
             console.error('Contact not found.');
         }
     }
+
+    findAndDeleteContact(name) {
+        const index = this.contacts.findIndex(c => c.firstName === name || c.lastName === name);
+        if (index !== -1) {
+            this.contacts.splice(index, 1);
+            console.log(`Contact '${name}' deleted successfully.`);
+        } else {
+            console.error('Contact not found.');
+        }
+    }
 }
 
 const addressBook = new AddressBook();
 
 console.log(JSON.stringify(addressBook.contacts));
-
 addressBook.addContact("Ayush", "Agarwal", "Agra", "Agra", "Uttar Pradesh", "282001", "9876543210", "ayushofficial4208@gmail.com");
 addressBook.addContact("Mukul", "Singh", "Delhi", "New Delhi", "Delhi", "110001", "9123456789", "mukul.singh@example.com");
 addressBook.addContact("Ajay", "Tyagi", "Noida", "Noida", "Uttar Pradesh", "201301", "9234567890", "ajay.tyagi@example.com");
@@ -94,5 +99,7 @@ console.log(JSON.stringify(addressBook.contacts, null, 2));
 console.log();
 
 addressBook.findAndEditContact("Ajay", { city: "Ghaziabad", phone: "9988776655" });
+console.log(JSON.stringify(addressBook.contacts, null, 2));
 
+addressBook.findAndDeleteContact("Mukul");
 console.log(JSON.stringify(addressBook.contacts, null, 2));
